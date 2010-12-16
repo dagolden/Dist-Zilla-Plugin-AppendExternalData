@@ -92,7 +92,7 @@ no Moose;
 
 __END__
 
-=for Pod::Coverage method_names_here
+=for Pod::Coverage prune_files munge_files munge_file
 
 =begin wikidoc
 

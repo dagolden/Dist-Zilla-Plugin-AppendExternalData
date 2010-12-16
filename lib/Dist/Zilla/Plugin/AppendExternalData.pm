@@ -24,7 +24,7 @@ This is the directory containing data to append.
 Files within this directory that have the same relative names as
 modules and executables will have their contents appended.  E.g.
 if C<source_dir> is F<pod>, then F<pod/lib/Foo.pm> will be appended
-to F<lib/Foo.pm>.  If a gather file does not match a file in the
+to F<lib/Foo.pm>.  If a gathered file does not match a file in the
 source directory or vice-versa, it will not altered and is not
 considered an error.
 
@@ -40,7 +40,7 @@ has source_dir => (
 =attr prune_source_dir
 
 This is a boolean that indicates whether the C<source_dir> should also be
-pruned from the distribution.
+pruned from the distribution. The default is 1.
 
 =cut
 
@@ -99,7 +99,7 @@ __END__
 = SYNOPSIS
 
   [AppendExternalData]
-  source_dir = pod       ; default
+  source_dir = pod       ; required
   prune_source_dir = 1   ; default
 
 = DESCRIPTION

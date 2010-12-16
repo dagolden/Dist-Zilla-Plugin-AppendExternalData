@@ -1,6 +1,8 @@
 Revision history for Dist-Zilla-Plugin-AppendExternalData
 
 {{$NEXT}}
+
+0.001     2010-12-16 14:47:49 EST5EDT
     
     - Proof of concept release
 

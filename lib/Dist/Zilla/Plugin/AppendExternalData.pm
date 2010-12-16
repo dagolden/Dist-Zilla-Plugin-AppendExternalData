@@ -33,7 +33,6 @@ considered an error.
 has source_dir => (
   is   => 'ro',
   isa  => Dir,
-  lazy => 1,
   coerce   => 1,
   required => 1,
 );
@@ -54,12 +53,12 @@ has prune_source_dir => (
 sub prune_files {
   my ($self) = @_;
 
-  return unless $self->prune_pod_dir;
+  return unless $self->prune_source_dir;
 
-  my $pod_dir = $self->pod_dir;
+  my $source_dir = $self->source_dir;
 
   for my $file ($self->zilla->files->flatten) {
-    next unless $file =~ m{\A$pod_dir\/}; 
+    next unless $file->name =~ m{\A$source_dir/}; 
     $self->log_debug([ 'pruning %s', $file->name ]);
     $self->zilla->prune_file($file);
   }
@@ -70,10 +69,10 @@ sub prune_files {
 sub munge_files {
   my ($self) = @_;
 
-  my $pod_dir = $self->pod_dir;
+  my $source_dir = $self->source_dir;
 
   for my $file ( @{ $self->found_files } ) {
-    my $pod_file = file($pod_dir, $file->name);
+    my $pod_file = file($source_dir, $file->name);
     next unless -e $pod_file;
     $self->munge_file($file, $pod_file);
   }
@@ -84,7 +83,7 @@ sub munge_file {
   $self->log_debug(
     [ 'appending Pod from %s to %s', $pod_file->stringify, $file->name ]
   );
-  $file->content($file->content . "\n" . $pod_file->slurp(iomode => ':utf8'));
+  $file->content($file->content . "\n" . $pod_file->slurp);
 }
 
 __PACKAGE__->meta->make_immutable;
@@ -107,6 +106,21 @@ __END__
 
 This [Dist::Zilla] plugin appends files in a directory to files being
 gathered for the distribution.
+
+When using this plugin, be thoughtful about the order in which you want
+files to be modified.  For example, if you are appending Pod, it makes
+a big difference if you append before or after a plugin like
+C<PodWeaver>.  If you list this plugin first, the Pod will be appended
+before weaving and the added Pod will wind up in the middle of the generated
+Pod.  If this plugin is listed last, the Pod will be appended after
+weaving and will follow the generald Pod from C<PodWeaver>.
+
+If appending a C<__DATA__> section, be sure to put this plugin last
+among plugins that modify your files.
+
+= CAVEAT
+
+This is a proof-of-concept and does not yet have any tests of its behavior.
 
 =end wikidoc
 

@@ -1,7 +1,7 @@
 use strict;
 use warnings;
-package Dist::Zilla::Plugin::AppendExternalPod;
-# ABSTRACT: No abstract given for Dist::Zilla::Plugin::AppendExternalPod
+package Dist::Zilla::Plugin::AppendExternalData;
+# ABSTRACT: Append data to gathered files
 
 use Moose;
 use Moose::Autobox;
@@ -18,32 +18,34 @@ with(
 use Path::Class;
 use namespace::autoclean;
 
-=attr pod_dir
+=attr source_dir (REQUIRED)
 
-This is the directory containing Pod to append.  The default is F<pod>.
+This is the directory containing data to append.
 Files within this directory that have the same relative names as
 modules and executables will have their contents appended.  E.g.
-F<pod/lib/Foo.pm> will be appended to F<lib/Foo.pm>
+if C<source_dir> is F<pod>, then F<pod/lib/Foo.pm> will be appended
+to F<lib/Foo.pm>.  If a gather file does not match a file in the
+source directory or vice-versa, it will not altered and is not
+considered an error.
 
 =cut
 
-has pod_dir => (
+has source_dir => (
   is   => 'ro',
   isa  => Dir,
   lazy => 1,
   coerce   => 1,
   required => 1,
-  default  => sub { dir(shift->zilla->root, 'pod')->absolute->stringfy },
 );
 
-=attr prune_pod_dir
+=attr prune_source_dir
 
-This is a boolean that indicates whether the C<pod_dir> should also be
+This is a boolean that indicates whether the C<source_dir> should also be
 pruned from the distribution.
 
 =cut
 
-has prune_pod_dir => (
+has prune_source_dir => (
   is   => 'ro',
   isa  => 'Bool',
   default  => 1,
@@ -97,9 +99,9 @@ __END__
 
 = SYNOPSIS
 
-  [AppendExternalPod]
-  pod_dir = pod       ; default
-  prune_pod_dir = 1   ; default
+  [AppendExternalData]
+  source_dir = pod       ; default
+  prune_source_dir = 1   ; default
 
 = DESCRIPTION
 

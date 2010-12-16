@@ -1,5 +1,6 @@
-Revision history for Dist-Zilla-Plugin-AppendExternalPod
+Revision history for Dist-Zilla-Plugin-AppendExternalData
 
 {{$NEXT}}
-    -
+    
+    - Initial release
 

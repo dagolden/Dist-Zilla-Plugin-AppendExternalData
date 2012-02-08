@@ -2,6 +2,7 @@ use strict;
 use warnings;
 package Dist::Zilla::Plugin::AppendExternalData;
 # ABSTRACT: Append data to gathered files
+# VERSION
 
 use Moose;
 use Moose::Autobox;

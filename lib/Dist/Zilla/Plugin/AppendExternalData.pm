@@ -110,12 +110,12 @@ gathered for the distribution.
 When using this plugin, be thoughtful about the order in which you want
 files to be modified.  For example, if you are appending Pod, it makes
 a big difference if you append before or after a plugin like
-C<PodWeaver>.  If you list this plugin first, the Pod will be appended
+{PodWeaver}.  If you list this plugin first, the Pod will be appended
 before weaving and the added Pod will wind up in the middle of the generated
 Pod.  If this plugin is listed last, the Pod will be appended after
-weaving and will follow the generald Pod from C<PodWeaver>.
+weaving and will follow the generated Pod from {PodWeaver}.
 
-If appending a C<__DATA__> section, be sure to put this plugin last
+If appending a {__DATA__} section, be sure to put this plugin last
 among plugins that modify your files.
 
 = CAVEAT

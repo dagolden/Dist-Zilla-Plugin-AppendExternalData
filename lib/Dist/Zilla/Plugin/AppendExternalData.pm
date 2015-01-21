@@ -6,7 +6,6 @@ package Dist::Zilla::Plugin::AppendExternalData;
 our $VERSION = '0.003';
 
 use Moose;
-use Moose::Autobox;
 use MooseX::Types::Path::Class qw(Dir File);
 with(
   'Dist::Zilla::Role::FileMunger',
@@ -59,7 +58,7 @@ sub prune_files {
 
   my $source_dir = $self->source_dir;
 
-  for my $file ($self->zilla->files->flatten) {
+  for my $file (@{ $self->zilla->files }) {
     next unless $file->name =~ m{\A$source_dir/}; 
     $self->log_debug([ 'pruning %s', $file->name ]);
     $self->zilla->prune_file($file);

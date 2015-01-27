@@ -95,35 +95,31 @@ __END__
 
 =for Pod::Coverage prune_files munge_files munge_file
 
-=begin wikidoc
-
-= SYNOPSIS
+=head1 SYNOPSIS
 
   [AppendExternalData]
   source_dir = pod       ; required
   prune_source_dir = 1   ; default
 
-= DESCRIPTION
+=head1 DESCRIPTION
 
-This [Dist::Zilla] plugin appends files in a directory to files being
+This L<Dist::Zilla> plugin appends files in a directory to files being
 gathered for the distribution.
 
 When using this plugin, be thoughtful about the order in which you want
 files to be modified.  For example, if you are appending Pod, it makes
 a big difference if you append before or after a plugin like
-{PodWeaver}.  If you list this plugin first, the Pod will be appended
+C<PodWeaver>.  If you list this plugin first, the Pod will be appended
 before weaving and the added Pod will wind up in the middle of the generated
 Pod.  If this plugin is listed last, the Pod will be appended after
-weaving and will follow the generated Pod from {PodWeaver}.
+weaving and will follow the generated Pod from C<PodWeaver>.
 
-If appending a {__DATA__} section, be sure to put this plugin last
+If appending a C<__DATA__> section, be sure to put this plugin last
 among plugins that modify your files.
 
-= CAVEAT
+=head1 CAVEAT
 
 This is a proof-of-concept and does not yet have any tests of its behavior.
-
-=end wikidoc
 
 =cut
 

@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+
 package Dist::Zilla::Plugin::AppendExternalData;
 # ABSTRACT: Append data to gathered files
 
@@ -7,14 +8,9 @@ our $VERSION = '0.003';
 
 use Moose;
 use MooseX::Types::Path::Class qw(Dir File);
-with(
-  'Dist::Zilla::Role::FileMunger',
-  'Dist::Zilla::Role::FilePruner',
-  'Dist::Zilla::Role::FileFinderUser' => {
-    default_finders => [ ':InstallModules', ':ExecFiles' ],
-  },
-);
-
+with( 'Dist::Zilla::Role::FileMunger', 'Dist::Zilla::Role::FilePruner',
+    'Dist::Zilla::Role::FileFinderUser' =>
+      { default_finders => [ ':InstallModules', ':ExecFiles' ], }, );
 
 use Path::Class;
 use namespace::autoclean;
@@ -32,10 +28,10 @@ considered an error.
 =cut
 
 has source_dir => (
-  is   => 'ro',
-  isa  => Dir,
-  coerce   => 1,
-  required => 1,
+    is       => 'ro',
+    isa      => Dir,
+    coerce   => 1,
+    required => 1,
 );
 
 =attr prune_source_dir
@@ -46,45 +42,44 @@ pruned from the distribution. The default is 1.
 =cut
 
 has prune_source_dir => (
-  is   => 'ro',
-  isa  => 'Bool',
-  default  => 1,
+    is      => 'ro',
+    isa     => 'Bool',
+    default => 1,
 );
 
 sub prune_files {
-  my ($self) = @_;
+    my ($self) = @_;
 
-  return unless $self->prune_source_dir;
+    return unless $self->prune_source_dir;
 
-  my $source_dir = $self->source_dir;
+    my $source_dir = $self->source_dir;
 
-  for my $file (@{ $self->zilla->files }) {
-    next unless $file->name =~ m{\A$source_dir/}; 
-    $self->log_debug([ 'pruning %s', $file->name ]);
-    $self->zilla->prune_file($file);
-  }
+    for my $file ( @{ $self->zilla->files } ) {
+        next unless $file->name =~ m{\A$source_dir/};
+        $self->log_debug( [ 'pruning %s', $file->name ] );
+        $self->zilla->prune_file($file);
+    }
 
-  return;
+    return;
 }
 
 sub munge_files {
-  my ($self) = @_;
+    my ($self) = @_;
 
-  my $source_dir = $self->source_dir;
+    my $source_dir = $self->source_dir;
 
-  for my $file ( @{ $self->found_files } ) {
-    my $pod_file = file($source_dir, $file->name);
-    next unless -e $pod_file;
-    $self->munge_file($file, $pod_file);
-  }
+    for my $file ( @{ $self->found_files } ) {
+        my $pod_file = file( $source_dir, $file->name );
+        next unless -e $pod_file;
+        $self->munge_file( $file, $pod_file );
+    }
 }
 
 sub munge_file {
-  my ($self, $file, $pod_file) = @_;
-  $self->log_debug(
-    [ 'appending Pod from %s to %s', $pod_file->stringify, $file->name ]
-  );
-  $file->content($file->content . "\n" . $pod_file->slurp);
+    my ( $self, $file, $pod_file ) = @_;
+    $self->log_debug(
+        [ 'appending Pod from %s to %s', $pod_file->stringify, $file->name ] );
+    $file->content( $file->content . "\n" . $pod_file->slurp );
 }
 
 __PACKAGE__->meta->make_immutable;
